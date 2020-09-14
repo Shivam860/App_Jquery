@@ -36,6 +36,21 @@ namespace App_Jquery_0908
         }
 
         [WebMethod]
+        public static void Update(String A, String B, String C,String D)
+        {
+            con.Open();
+            SqlCommand com = new SqlCommand("procuser", con);
+            com.CommandType = CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("@action", "update");
+            com.Parameters.AddWithValue("@u_id", D);
+            com.Parameters.AddWithValue("@u_name", A);
+            com.Parameters.AddWithValue("@u_email", B);
+            com.Parameters.AddWithValue("@u_password", C);
+            com.ExecuteNonQuery();
+            con.Close();
+        }
+
+        [WebMethod]
         public static string Get()
         {
             string pp = "";
@@ -43,6 +58,35 @@ namespace App_Jquery_0908
             SqlCommand com = new SqlCommand("procuser", con);
             com.CommandType = CommandType.StoredProcedure;
             com.Parameters.AddWithValue("@action", "display");
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            con.Close();
+            pp = JsonConvert.SerializeObject(dt);
+            return pp;
+        }
+
+        [WebMethod]
+        public static void Delete(String A)
+        {
+            con.Open();
+            SqlCommand com = new SqlCommand("procuser", con);
+            com.CommandType = CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("@action", "delete");
+            com.Parameters.AddWithValue("@u_id", A);
+            com.ExecuteNonQuery();
+            con.Close();
+        }
+
+        [WebMethod]
+        public static string Edit(String A)
+        {
+            string pp = "";
+            con.Open();
+            SqlCommand com = new SqlCommand("procuser", con);
+            com.CommandType = CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("@action", "edit");
+            com.Parameters.AddWithValue("@u_id", A);
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataTable dt = new DataTable();
             da.Fill(dt);
